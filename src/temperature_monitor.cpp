@@ -14,6 +14,7 @@ static std::optional<temp_t> read_temperature(const std::string& filename)
   }
   temp_t v;
   in >> v;
+  in.close();
   return v;
 }
 
