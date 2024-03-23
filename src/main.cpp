@@ -20,12 +20,10 @@ static void print_temperatures(const TemperatureMonitor& monitor){
 
 int main(int argc, char** argv){
   const auto filename = (fs::path(THERMAL_ZONES_FOLDER) / THERMAL_ZONE_FILE / TEMPERATURE_FIELD).string();
-
-  TemperatureMonitor::Parameters parameters = {1000u};
+  TemperatureMonitor::Parameters parameters = {10u, 1.f, filename};
   TemperatureMonitor monitor(parameters);
-  while (!monitor.is_full()){
-    monitor.update(filename);
-  }
+
+  monitor.run();
   print_temperatures(monitor);
   
   return 0;

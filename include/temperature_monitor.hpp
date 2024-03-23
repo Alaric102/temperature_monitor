@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <iostream>
 #include <list>
 
 typedef size_t temp_t;
@@ -17,22 +16,30 @@ class TemperatureMonitor {
 public:
   struct Parameters {
     size_t max_history_size = 100u;
+    float frequency = 1.f;
+    std::string filename = "";
+    bool is_verbose = true;
   };
 
 public:
-  explicit TemperatureMonitor(const TemperatureMonitor::Parameters& parameters);
+  explicit TemperatureMonitor(const TemperatureMonitor::Parameters& parameters): PARAMETERS_(parameters) {};
 
-  bool update(const std::string& filename);
+  void update_history();
+
+  void run();
+
+  const std::list<temp_t>::const_iterator begin() const noexcept {return history_.begin(); };
+  
+  const std::list<temp_t>::const_iterator end() const noexcept {return history_.end(); };
+
+  const temp_t back() const noexcept { return history_.back(); };
 
   size_t size() const noexcept { return history_.size(); };
-
-  bool is_full() const noexcept { return history_.size() == PARAMETERS_.max_history_size; };
-
-  const std::list<temp_t>::const_iterator begin() const {return history_.begin(); };
   
-  const std::list<temp_t>::const_iterator end() const {return history_.end(); };
+  bool is_full() const noexcept { return history_.size() >= PARAMETERS_.max_history_size; };
 
 private:
+
   const Parameters PARAMETERS_;
   std::list <temp_t> history_;
   const float v = static_cast<float>(0u);
